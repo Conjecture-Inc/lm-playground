@@ -26,11 +26,7 @@ Which installs svelte and any other dependencies.
 
 # Running
 
-```
-npm run
-```
-
-or if developing, to get reloads on changes:
+To start the playground, run:
 ```
 npm run dev
 ```
