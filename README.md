@@ -6,7 +6,7 @@ First, install npm.
 
 To get npm on a server, either run:
 ```
-sudo apt-install npm
+sudo apt install npm
 ```
 or
 
