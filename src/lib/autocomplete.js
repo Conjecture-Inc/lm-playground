@@ -1,6 +1,6 @@
 var callOpenAI = async (dataJson, modelEndpoint) => {
   var url = modelEndpoint;
-  const api_key = "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";
+  const api_key = "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";
 
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
@@ -26,7 +26,7 @@ var callOpenAI = async (dataJson, modelEndpoint) => {
 
 // var callLocalapi calls the local api at localhost:8000/message/
 var callLocalapi = async (dataJson) => {
-  var url = "http://localhost:8000/message/";
+  var url = "http://localhost:8000/complete";
   var xhr = new XMLHttpRequest();
   xhr.open("POST", url);
 

@@ -7,11 +7,15 @@ let generated_text = '';
 let settings_hidden = true;
 let generating = false;
 let settings = {
-    model: 'neox20b',
+    model: 'chonk-v4',
     temperature: '0',
     n: '1',
     max_tokens: '100',
-    stop: ''
+    p: '0',
+    k: '0',
+    frequency_penalty: '0',
+    presence_penalty: '0',
+    stop: []
 }
 function addHistory() {
   history = [...history, [text, generated_text]];
@@ -41,9 +45,10 @@ function toggle_settings() {
 <!-- within each item, text and generated text are printed seperated by a line, with linebreaks at each br -->
 <!-- and place it to the right of the text area -->
 <div id="history" style="width: 19%; height: 100%; overflow: scroll; float: right;">
-    {#each history as [text, generated_text]}
+    {#each history as [history_text, history_generated_text]}
         <!-- svelte-ignore a11y-click-events-have-key-events -->
-        <div style="color: grey;" on:click={() => {text = text; generated_text = generated_text;}}>{text}<br>{generated_text}</div>
+        <div style="color: grey;" on:click={() => {text = history_text; generated_text = history_generated_text;}}>{history_text}<br>{history_generated_text}</div>
+        <br><br>
     {/each}
 </div>
 <br>
@@ -57,15 +62,17 @@ function toggle_settings() {
 <button on:click={toggle_settings}>Settings</button>
 
 <!-- A button to copy the text and generated_text, as: Prompt: {text} <br> Completion: {generated_text} -->
-<button on:click={() => {navigator.clipboard.writeText(`Prompt: ${text}\n\nCompletion: ${generated_text}`)}}>Copy</button>
+<button on:click={() => {navigator.clipboard.writeText(`${text}${generated_text}`)}}>Copy</button>
 
 <!-- a settings panel that is hidden by default. contains:
-a dropdown for the model, number inputs for temperature, n, and max tokens, and a text input for stop-->
+a toggle button for generation appending style (in textbox or in generated_text)
+a dropdown for the model, number inputs for temperature, n, p, k, frequence and presence penalties, max tokens, and a text input for stop, and a list of deletable stop tokens -->
 {#if !settings_hidden}
-  <div>
+  <div style="width: 80%; height: 40%; overflow: scroll;">
     <p>Settings</p>
+    
     <select bind:value={settings.model}>
-      <option value="gpt-neox-20b">neox20b</option>
+      <option value="chonk-v4" selected>chonk-v4</option>
       <!-- <option value="gptj">gptj</option> -->
     </select>
     <br>
@@ -78,8 +85,31 @@ a dropdown for the model, number inputs for temperature, n, and max tokens, and 
     <div>Max Tokens:</div>
     <input type="number" bind:value={settings.max_tokens} step="10" min="0">
     <br>
-    <!-- <div>Stop token (optional):</div> -->
-    <!-- <input type="text" bind:value={settings.stop}> -->
+    <div>p:</div>
+    <input type="number" bind:value={settings.p} step="0.1" min="0" max="1">
+    <br>
+    <div>k:</div>
+    <input type="number" bind:value={settings.k} step="1" min="0">
+    <br>
+    <div>Frequency Penalty:</div>
+    <input type="number" bind:value={settings.frequency_penalty} step="0.1" min="0" max="1">
+    <br>
+    <div>Presence Penalty:</div>
+    <input type="number" bind:value={settings.presence_penalty} step="0.1" min="0" max="1">
+    <br>
+    <!-- stop tokens should be enterable. when entered, add a stop token and clear the input -->
+    <div>Stop token (optional):</div>
+    <input type="text" on:keydown={e => {
+      if (e.key === 'Enter') {
+        settings.stop = [...settings.stop, e.target.value];
+        e.target.value = '';
+      }
+    }}>
+    <br>
+    <!-- list stop tokens in a div with an x that deletes them when clicked-->
+    {#each settings.stop as stop}
+      <div>{stop} <button on:click={() => {settings.stop = settings.stop.filter((s) => s !== stop)}} style="height: 10px; width: 10px;">x</button></div>
+    {/each}
   </div>
 
 {/if}
