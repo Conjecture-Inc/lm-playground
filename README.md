@@ -24,3 +24,13 @@ npm install
 
 Which installs svelte and any other dependencies.
 
+# Running
+
+```
+npm run
+```
+
+or if developing, to get reloads on changes:
+```
+npm run dev
+```
