@@ -10,7 +10,10 @@ sudo apt install npm
 ```
 or
 
-use nvm: https://github.com/nvm-sh/nvm#installing-and-updating
+use nvm (https://github.com/nvm-sh/nvm#installing-and-updating) as follows:
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
+```
 
 Then install the latest version of nvm:
 ```
